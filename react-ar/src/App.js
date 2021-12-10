@@ -7,7 +7,7 @@ import "./App.css";
 const App = () => {
   
   return (
-    <Scanner />
+    <Planets />
   );
 };
 

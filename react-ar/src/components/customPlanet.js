@@ -1,7 +1,7 @@
 import { useTexture } from "@react-three/drei";
 
 const CustomPlanet = ({ name, location }) => {
-  const marsTexture = useTexture(`assets/img/planets/${name}.jpeg`);
+  const texture = useTexture(`assets/img/planets/${name}.jpeg`);
 
   console.log(name);
   console.log(location);
@@ -10,7 +10,7 @@ const CustomPlanet = ({ name, location }) => {
       
       <mesh position={location}>
         <sphereGeometry args={[0.1, 32, 16]} />
-        <meshStandardMaterial map={marsTexture} />
+        <meshStandardMaterial map={texture} />
       </mesh>
     </>
   );

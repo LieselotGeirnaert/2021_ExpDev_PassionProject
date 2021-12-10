@@ -6,6 +6,7 @@ import { Canvas } from "@react-three/fiber";
 // components
 import { db } from "../firebase-config";
 import CustomPlanet from "../components/customPlanet";
+import Planet from "../components/planet";
 // styling
 
 const Loader = () => {
@@ -32,12 +33,13 @@ const Planets = () => {
       <directionalLight position={[0, 0, 5]} />
       <Suspense fallback={<Loader />}>
         {planets.map((item, index) => (
-          <CustomPlanet
+          <Planet
             key={index}
             name={item.title}
             location={[item.locationX, item.locationY, item.locationZ]}
           />
         ))}
+        {/* <Planet name={"earth"}/> */}
       </Suspense>
     </ARCanvas>
   );
