@@ -3,6 +3,7 @@ import { useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
 // components
 import { db } from "../firebase-config";
+import generateId from "../utils";
 
 const Scanner = () => {
   const webcamRef = useRef(null);
@@ -14,7 +15,7 @@ const Scanner = () => {
     console.log(imgSrc);
 
     const writePlanet = async () => {
-      await setDoc(doc(db, "planets", "test"), {
+      await setDoc(doc(db, "planets", generateId(15)), {
         title: "test",
         image: imageSrc
       });

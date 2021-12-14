@@ -6,6 +6,7 @@ import { Canvas } from "@react-three/fiber";
 // components
 import { db } from "../firebase-config";
 import CustomPlanet from "../components/customPlanet";
+import Message from "../components/message";
 import Planet from "../components/planet";
 // styling
 
@@ -14,7 +15,8 @@ const Loader = () => {
   return <Html center>{progress} % loaded</Html>;
 };
 
-const Planets = () => {
+const Planets = ({ handleShowMessage }) => {
+  const [screen, setScreen] = useState("AR");
   const [planets, setPlanets] = useState([]);
   const planetsCollectionRef = collection(db, "planets");
 
@@ -27,21 +29,33 @@ const Planets = () => {
     getPlanets();
   }, []);
 
+  // const handleShowMessage = () => {
+  //   // setScreen("message");
+  //   console.log("setscreen");
+  // };
+
   return (
-    <ARCanvas>
-      <ambientLight intensity={0.2} />
-      <directionalLight position={[0, 0, 5]} />
-      <Suspense fallback={<Loader />}>
-        {planets.map((item, index) => (
+    <>
+      {screen === "AR" ? (
+        <ARCanvas>
+          <ambientLight intensity={0.2} />
+          <directionalLight position={[0, 0, 5]} />
+          <Suspense fallback={<Loader />}>
+            {/* {planets.map((item, index) => (
           <Planet
             key={index}
             name={item.title}
             location={[item.locationX, item.locationY, item.locationZ]}
           />
-        ))}
-        {/* <Planet name={"earth"}/> */}
-      </Suspense>
-    </ARCanvas>
+        ))} */}
+            {/* <Planet name={"earth"} location={[1, 1, 1]} /> */}
+            <Message handleClickMessage={handleShowMessage} />
+          </Suspense>
+        </ARCanvas>
+      ) : (
+        <p>berichtje</p>
+      )}
+    </>
   );
 };
 
