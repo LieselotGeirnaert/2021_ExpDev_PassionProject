@@ -34,6 +34,11 @@
   width: 100%;
 }
 
+.textarea {
+  composes: input;
+  height: 5rem;
+}
+
 .input:focus {
 }
 

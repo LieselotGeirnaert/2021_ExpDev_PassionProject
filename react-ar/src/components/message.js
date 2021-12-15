@@ -8,12 +8,12 @@ const Message = ({ name, location, handleClickMessage }) => {
   };
 
   return (
-    <Interactive onSelect={onSelect}>
+    // <Interactive onSelect={onSelect}>
       <mesh>
         <boxGeometry args={[0.1, 0.1, 0.1]} />
         <meshStandardMaterial color={"hotpink"} />
       </mesh>
-    </Interactive>
+    // </Interactive>
   );
 };
 

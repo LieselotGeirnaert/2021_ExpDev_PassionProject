@@ -35,25 +35,20 @@ const SendMessage = ({ handleSetScreen }) => {
 
   return (
     <div className={styles.container}>
-      <button type="submit" onClick={() => handleSetScreen("overview")}>
-        Sluiten
-      </button>
       <h2 className={styles.title}>Plaats je bericht tussen de sterren</h2>
       {screen === "message" ? (
         <form onSubmit={handleFormSubmission} className={styles.form}>
           <label className={styles.label}>Van wie komt het berichtje?</label>
           <input
             value={senderText}
-            placeholder="Type a message..."
             onChange={(e) => setSenderText(e.target.value)}
             className={styles.input}
           ></input>
           <label className={styles.label}>Wat wil je sturen?</label>
           <textarea
             value={messageText}
-            placeholder="Type a message..."
             onChange={(e) => setMessageText(e.target.value)}
-            className={styles.input}
+            className={styles.textarea}
           ></textarea>
           <button
             type="submit"
@@ -68,7 +63,6 @@ const SendMessage = ({ handleSetScreen }) => {
       )}
       {screen === "confirmation" ? (
         <div>
-          {" "}
           <p>We hebben je berichtje goed ontvangen!</p>
           <button type="submit" onClick={() => handleSetScreen("overview")}>
             Bekijk het universum

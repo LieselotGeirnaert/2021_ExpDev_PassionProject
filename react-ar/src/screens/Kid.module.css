@@ -1,0 +1,59 @@
+/* .div {
+  position: absolute;
+  width: 100vw;
+  height: 40rem;
+  left: 0;
+  top: 0;
+  background-color: pink;
+  z-index: 100;
+}
+
+.canvas {
+  position: absolute;
+  width: 100vw;
+  height: 40rem;
+  left: 0;
+  top: 0;
+  z-index: 1;
+} */
+
+.container {
+  width: 85vw;
+}
+
+.title {
+  font-size: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+.subTitle {
+  font-family: Roboto;
+  font-size: 1.3rem;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5rem;
+  width: 100%;
+}
+
+.listItem {
+  align-items: center;
+  background-color: var(--white);
+  border-radius: var(--borderSmall);
+  display: flex;
+  margin: 1rem 0;
+  width: 100%;
+}
+
+.listItemText {
+  color: var(--orange);
+  line-height: 1.5rem;
+  margin-left: 2.5rem;
+  overflow-wrap: break-word;
+}
+
+.listItemImg {
+  margin: 1.5rem;
+}

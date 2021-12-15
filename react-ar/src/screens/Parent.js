@@ -6,15 +6,14 @@ import Overview from "../components/parents/Overview";
 import styles from "./Parent.module.css";
 
 const Parent = () => {
-  const [currentScreen, setCurrentScreen] = useState("message");
+  const [currentScreen, setCurrentScreen] = useState("overview");
 
   const handleSetScreen = (screen) => {
     setCurrentScreen(screen);
-    console.log("screen;", screen);
   };
 
   return (
-    <>
+    <section>
       { currentScreen === "overview" ? (
         <Overview handleSetScreen={(screen) => handleSetScreen(screen)} />
       ) : (
@@ -25,7 +24,7 @@ const Parent = () => {
       ) : (
         ""
       )}
-    </>
+    </section>
   );
 };
 

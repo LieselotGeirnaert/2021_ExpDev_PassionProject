@@ -1,7 +1,11 @@
 :root {
-  --white: #FBF8F7;
+  --white: #EFEFEF;
   --darkWhite: #FBF8F7;
-  --blue: #223976;
-  --darkBlue: #818795;
-  --pink: #F47466;
+  --darkestBlue: #282561;
+  --darkBlue: #3B3A73;
+  --blue: #4E4F87;
+  --lightBlue: #63669E;
+  --lightestBlue: #7981BC;
+  --orange: #F48022;
+  --borderSmall: 10px;
 }
