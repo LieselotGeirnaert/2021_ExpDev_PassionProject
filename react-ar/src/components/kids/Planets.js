@@ -4,11 +4,11 @@ import { ARCanvas } from "@react-three/xr";
 // components
 import { db } from "../../firebase-config";
 import Loader from "../Loader";
-import Planet from "./Planet";
+import Planet from "../Planet";
 // styling
 import styles from "./Planets.module.css";
 
-const Planets = () => {
+const Planets = ({ handleSetScreen }) => {
   const [planets, setPlanets] = useState([]);
 
   useEffect(() => {
@@ -22,6 +22,9 @@ const Planets = () => {
 
   return (
     <section className={styles.container}>
+      <button className="back" onClick={() => handleSetScreen("kid")}>
+        <span className="hidden">Terug</span>
+      </button>
       <h3 className="hidden">Planeten</h3>
       <ARCanvas className={styles.canvas}>
         <ambientLight intensity={0.2} />

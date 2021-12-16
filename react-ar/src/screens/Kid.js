@@ -1,5 +1,7 @@
-import { useState } from "react";
-// components
+import { useState, useEffect } from "react";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+// composnents
+import { db } from "../firebase-config";
 import Planets from "../components/kids/Planets";
 import AddPlanet from "../components/kids/AddPlanet";
 import Messages from "../components/kids/Messages";
@@ -9,6 +11,30 @@ import styles from "./Kid.module.css";
 const Kid = () => {
   const [currentScreen, setCurrentScreen] = useState("kid");
   const name = "Lieselot";
+  const [unreadMessages, setUnreadMessages] = useState([]);
+  const [readMessages, setReadMessages] = useState([]);
+
+  useEffect(() => {
+    const queryRead = query(
+      collection(db, "messages"),
+      where("read", "==", true)
+    );
+    onSnapshot(queryRead, (snapshot) => {
+      setReadMessages(
+        snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      );
+    });
+
+    const queryUnread = query(
+      collection(db, "messages"),
+      where("read", "==", false)
+    );
+    onSnapshot(queryUnread, (snapshot) => {
+      setUnreadMessages(
+        snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      );
+    });
+  }, []);
 
   const handleSetScreen = (screen) => {
     setCurrentScreen(screen);
@@ -52,6 +78,11 @@ const Kid = () => {
               className={styles.listItem}
               onClick={() => handleSetScreen("messages")}
             >
+              {unreadMessages.length > 0 ? (
+                <p className={styles.unread}>{unreadMessages.length}</p>
+              ) : (
+                ""
+              )}
               <img
                 alt=""
                 src="/assets/img/icon-envelope.svg"
@@ -67,9 +98,25 @@ const Kid = () => {
         ""
       )}
 
-      {currentScreen === "planets" ? <Planets /> : ""}
-      {currentScreen === "add-planet" ? <AddPlanet /> : ""}
-      {currentScreen === "messages" ? <Messages handleSetScreen={() => handleSetScreen("kid")}/> : ""}
+      {currentScreen === "planets" ? (
+        <Planets handleSetScreen={() => handleSetScreen("kid")} />
+      ) : (
+        ""
+      )}
+      {currentScreen === "add-planet" ? (
+        <AddPlanet handleSetScreen={() => handleSetScreen("kid")} />
+      ) : (
+        ""
+      )}
+      {currentScreen === "messages" ? (
+        <Messages
+          unreadMessages={unreadMessages}
+          readMessages={readMessages}
+          handleSetScreen={() => handleSetScreen("kid")}
+        />
+      ) : (
+        ""
+      )}
     </section>
   );
 };

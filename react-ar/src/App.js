@@ -44,7 +44,7 @@ const App = () => {
   // }, []);
   return (
     <section className={styles.container}>
-      {screen === "start" ? (
+      {/* {screen === "start" ? (
         ""
       ) : (
         <button
@@ -54,7 +54,7 @@ const App = () => {
         >
           x
         </button>
-      )}
+      )} */}
 
       <h1 className="hidden">Tussen de sterren</h1>
 

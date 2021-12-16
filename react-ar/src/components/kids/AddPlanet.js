@@ -5,13 +5,15 @@ import { ARCanvas } from "@react-three/xr";
 // styling
 import styles from "./AddPlanet.module.css";
 
-const AddPlanet = () => {
+const AddPlanet = ({ handleSetScreen }) => {
 
 
   return (
     <section className={styles.container}>
-      <h3 className="">add planet</h3>
-      
+      <button className="back" onClick={() => handleSetScreen("kid")}>
+        <span className="hidden">Terug</span>
+      </button>
+      <h3 className="hidden">Planeten</h3>
     </section>
   );
 };

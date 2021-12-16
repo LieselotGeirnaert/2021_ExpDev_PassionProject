@@ -2,18 +2,12 @@ import { useState, useEffect, Suspense } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { ARCanvas } from "@react-three/xr";
 // components
-import { db } from "../../firebase-config";
 // styling
 import styles from "./Messages.module.css";
 
-const Messages = ({ handleSetScreen }) => {
-  const [messages, setMessages] = useState([]);
-
-  useEffect(() => {
-    onSnapshot(collection(db, "messages"), (snapshot) => {
-      setMessages(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    });
-  }, []);
+const Messages = ({ readMessages, unreadMessages, handleSetScreen }) => {
+  console.log("unread: ", unreadMessages);
+  console.log("read: ", readMessages);
 
   const handleNewMessage = () => {
     console.log("hier moet AR openen om het bericht te zoeken");
@@ -21,8 +15,8 @@ const Messages = ({ handleSetScreen }) => {
 
   return (
     <section className={styles.container}>
-      <button className={styles.back} onClick={() => handleSetScreen("kid")}>
-        Terug
+      <button className="back" onClick={() => handleSetScreen("kid")}>
+        <span className="hidden">Terug</span>
       </button>
       <h3 className={styles.title}>Jouw berichten</h3>
       <button className={styles.new} onClick={handleNewMessage}>
@@ -34,11 +28,13 @@ const Messages = ({ handleSetScreen }) => {
           className={styles.listItemImg}
         />
         <p className={styles.newText}>
-          Je hebt <span className={styles.number}>0</span> nieuwe berichten
+          {unreadMessages.length === 1
+            ? "Je hebt 1 nieuw bericht"
+            : `Je hebt ${unreadMessages.length} nieuwe berichten`}
         </p>
       </button>
       <ul className={styles.list}>
-        {messages.map((item, index) => (
+        {readMessages.map((item, index) => (
           <li className={styles.listItem} key={index}>
             <p className={styles.from}>
               Van<span className="punctuation">:</span>
