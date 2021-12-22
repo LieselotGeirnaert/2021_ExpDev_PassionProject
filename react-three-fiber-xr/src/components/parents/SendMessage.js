@@ -28,8 +28,8 @@ const SendMessage = ({ handleSetScreen }) => {
 
   const writeToDatabase = async () => {
     await setDoc(doc(db, "messages", generateId(15)), {
-      sender: messageText,
-      message: senderText,
+      sender: senderText,
+      message: messageText,
       read: false,
     });
   };

@@ -57,7 +57,7 @@
 .fromText {
   align-self: center;
   color: var(--blue);
-  font-family: Roboto;
+  font-family: averta-regular;
   font-size: 1.3rem;
   grid-column: 2 / span 1;
   grid-row: 1 / span 1;
@@ -65,7 +65,7 @@
 
 .message {
   color: var(--lightestBlue);
-  font-family: Roboto;
+  font-family: averta-regular;
   font-size: 1.2rem;
   grid-column: 1 / span 2;
   grid-row: 2 / span 1;
@@ -73,4 +73,21 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.fullMessage {
+  composes: message;
+ white-space: pre-wrap;
+}
+
+.unreadListItem {
+  composes: listItem;
+
+}
+
+.empty {
+  font-family: averta-bold;
+  font-size: 1.3rem;
+  padding: 5rem 0;
+  text-align: center;
 }

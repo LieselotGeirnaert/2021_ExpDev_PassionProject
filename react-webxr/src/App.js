@@ -9,8 +9,6 @@ const App = () => {
   const canvasRef = useRef();
 
   useEffect(() => {
-    console.log(canvasRef.current);
-
     const checkXRSupport = async () => {
       const isArSessionSupported =
         navigator.xr &&
@@ -27,8 +25,6 @@ const App = () => {
   }, []);
 
   const openAR = () => {
-    console.log("open");
-
     let xrSession;
     let gl;
     let scene;
@@ -59,16 +55,10 @@ const App = () => {
       // canvas = document.createElement("canvas");
       // document.body.appendChild(canvas);
       gl = canvasRef.current.getContext("webgl", { xrCompatible: true });
-      console.log("canvas ", canvasRef);
-      console.log("gl ", gl);
-      console.log("xrSession 1 ", xrSession);
 
       xrSession.updateRenderState({
         baseLayer: new XRWebGLLayer(xrSession, gl),
       });
-
-      console.log("xrSession 2 ", xrSession);
-
     };
 
     const onSessionStarted = async () => {
@@ -96,16 +86,9 @@ const App = () => {
 
     const onXRFrame = (time, frame) => {
       xrSession.requestAnimationFrame(onXRFrame);
-
       const framebuffer = xrSession.renderState.baseLayer.framebuffer;      
       gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-      console.log("framebuffer", framebuffer);
-      console.log("renderer", renderer);
-
       renderer.setFramebuffer(framebuffer);
-
-      console.log("framebuffer", framebuffer);
-      console.log("renderer", renderer);
 
       const pose = frame.getViewerPose(localReferenceSpace);
       if (pose) {
@@ -123,7 +106,6 @@ const App = () => {
         if (hitTestResults.length > 0) {
           shutdownSession();
         }
-        console.log("results ", hitTestResults);
 
         if (!stabilized) {
           stabilized = true;

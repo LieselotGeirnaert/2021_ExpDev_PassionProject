@@ -1,30 +1,41 @@
-import { useState, Suspense } from "react";
-import { ARCanvas } from "@react-three/xr";
-import { Loader } from "@react-three/drei";
+import { updateDoc, doc } from "firebase/firestore";
+import { useState } from "react";
 // components
-import Message from "./Message";
+import { db } from "../../firebase-config";
 // styling
 import styles from "./Messages.module.css";
 
 const Messages = ({ readMessages, unreadMessages, handleSetScreen }) => {
   const [currentScreen, setCurrentScreen] = useState("overview");
+  const [currentMessage, setCurrentMessage] = useState();
 
   const handleNewMessage = () => {
-    setCurrentScreen("search");
+    setCurrentScreen("newMessages");
   };
 
-  const handleClickMessage = () => {
-    console.log("bericht openen");
-    setCurrentScreen("overview")
+  const handleClickMessage = (id) => {
+    setCurrentScreen("newMessage");
+    setCurrentMessage(unreadMessages[id]);
+  };
+
+  const handleReadMessage = () => {
+    setCurrentScreen("newMessages");
+    writeToDatabase();
+  };
+
+  const writeToDatabase = async () => {
+    await updateDoc(doc(db, "messages", String(currentMessage.id)), {
+      read: true,
+    });
   };
 
   return (
     <section className={styles.container}>
-      <button className="back" onClick={() => handleSetScreen("kid")}>
-        <span className="hidden">Terug</span>
-      </button>
       {currentScreen === "overview" ? (
         <div>
+          <button className="back" onClick={() => handleSetScreen("kid")}>
+            <span className="hidden">Terug</span>
+          </button>
           <h3 className={styles.title}>Jouw berichten</h3>
           <button className={styles.new} onClick={handleNewMessage}>
             <img
@@ -56,14 +67,52 @@ const Messages = ({ readMessages, unreadMessages, handleSetScreen }) => {
         ""
       )}
 
-      {currentScreen === "search" ? (
-        <ARCanvas className={styles.canvas}>
-          <ambientLight intensity={0.2} />
-          <directionalLight position={[0, 0, 5]} />
-          <Suspense fallback={<Loader />}>
-            <Message handleClickMessage={() => handleClickMessage()} />
-          </Suspense>
-        </ARCanvas>
+      {currentScreen === "newMessages" ? (
+        <div>
+          <button className="back" onClick={() => setCurrentScreen("overview")}>
+            <span className="hidden">Terug</span>
+          </button>
+          <h3 className={styles.title}>Jouw ongelezen berichten</h3>
+          {unreadMessages.length > 0 ? (
+            <ul className={styles.unreadList}>
+              {unreadMessages.map((item, id) => (
+                <li
+                  className={styles.unreadListItem}
+                  key={id}
+                  onClick={() => handleClickMessage(id)}
+                >
+                  <p className={styles.from}>
+                    Van<span className="punctuation">:</span>
+                  </p>
+                  <p className={styles.fromText}>{item.sender}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className={styles.empty}>Je hebt geen nieuwe berichten</p>
+          )}
+        </div>
+      ) : (
+        ""
+      )}
+
+      {currentScreen === "newMessage" ? (
+        <div>
+          <button className="back" onClick={() => handleReadMessage()}>
+            <span className="hidden">Terug</span>
+          </button>
+          <h3 className={styles.title}>Jouw bericht</h3>
+
+          <ul className={styles.unreadList}>
+            <li className={styles.unreadListItem}>
+              <p className={styles.from}>
+                Van<span className="punctuation">:</span>
+              </p>
+              <p className={styles.fromText}>{currentMessage.sender}</p>
+              <p className={styles.fullMessage}>{currentMessage.message}</p>
+            </li>
+          </ul>
+        </div>
       ) : (
         ""
       )}

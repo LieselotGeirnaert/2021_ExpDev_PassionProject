@@ -3,8 +3,6 @@ import { useTexture } from "@react-three/drei";
 const CustomPlanet = ({ name, location }) => {
   const texture = useTexture(`assets/img/planets/${name}.jpeg`);
 
-  console.log(name);
-  console.log(location);
   return (
     <>
       
