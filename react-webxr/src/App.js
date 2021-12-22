@@ -1,91 +1,171 @@
-import { useState } from "react";
-// components
-import Parent from "./screens/Parent";
-import Kid from "./screens/Kid";
-// styling
-import styles from "./styles/Home.module.css";
+import logo from "./logo.svg";
+import "./App.css";
+import { useEffect, useState } from "react";
+import * as THREE from "three";
+const { XRWebGLLayer } = window;
 
 const App = () => {
-  const [screen, setScreen] = useState("start");
+  const [XRIsSupported, setXRIsSupported] = useState();
 
-  // useEffect(() => {
-  //   console.log(window.DeviceOrientationEvent);
-  //   if (window.DeviceOrientationEvent) {
-  //     console.log("yes");
-  //     window.addEventListener("deviceorientation", (event) => {
-  //         console.log("nope?");
-  //         var rotateDegrees = event.alpha; // alpha: rotation around z-axis
-  //         var leftToRight = event.gamma; // gamma: left to right
-  //         var frontToBack = event.beta; // beta: front back motion
-  //         handleOrientationEvent(frontToBack, leftToRight, rotateDegrees);
-  //       },
-  //       true
-  //     );
-  //   }
+  let xrSession;
+  let canvas;
+  let gl;
+  let scene;
+  let camera;
+  let renderer;
+  let stabilized = false;
+  let localReferenceSpace;
+  let viewerSpace;
+  let hitTestSource;
+  let box;
+  
+  useEffect(() => {
+    const checkXRSupport = async () => {
+      const isArSessionSupported =
+        navigator.xr &&
+        navigator.xr.isSessionSupported &&
+        (await navigator.xr.isSessionSupported("immersive-ar"));
+      if (isArSessionSupported) {
+        setXRIsSupported(true);
+      } else {
+        setXRIsSupported(false);
+      }
+    };
 
-  //   const handleOrientationEvent = (
-  //     frontToBack,
-  //     leftToRight,
-  //     rotateDegrees
-  //   ) => {
-  //     console.log("frontToBack", frontToBack);
-  //     // console.log("leftToRight", leftToRight);
-  //     // console.log("rotateDegrees", rotateDegrees);
-  //     if (rotateDegrees < 45 || rotateDegrees > 315) {
-  //       console.log("windrichting: N");
-  //     } else if (rotateDegrees < 135 && rotateDegrees > 45) {
-  //       console.log("windrichting: O");
-  //     } else if (rotateDegrees < 225 && rotateDegrees > 135) {
-  //       console.log("windrichting: Z");
-  //     } else if (rotateDegrees < 315 && rotateDegrees > 225) {
-  //       console.log("windrichting: W");
-  //     }
-  //   };
-  // }, []);
+    checkXRSupport();
+  }, []);
+
+  const openAR = () => {
+    console.log("open");
+    
+
+    const activateXR = async () => {
+      try {
+        xrSession = await navigator.xr.requestSession("immersive-ar", {
+          requiredFeatures: ["hit-test", "dom-overlay"],
+          domOverlay: { root: document.body },
+        });
+
+        createXRCanvas();
+        await onSessionStarted();
+      } catch (e) {
+        console.log(e);
+        setXRIsSupported(false)
+      }
+    };
+
+    const createXRCanvas = () => {
+      canvas = document.createElement("canvas");
+      document.body.appendChild(canvas);
+      gl = canvas.getContext("webgl", { xrCompatible: true });
+      console.log("canvas ", canvas);
+      console.log("gl ", gl);
+
+      xrSession.updateRenderState({
+        baseLayer: new XRWebGLLayer(xrSession, gl),
+      });
+    };
+
+    const onSessionStarted = async () => {
+      document.body.classList.add("ar");
+      setupThreeJs();
+      localReferenceSpace = await xrSession.requestReferenceSpace("local");
+      viewerSpace = await xrSession.requestReferenceSpace("viewer");
+      hitTestSource = await xrSession.requestHitTestSource({
+        space: viewerSpace,
+        entityTypes: ["mesh"],
+      });
+
+      xrSession.requestAnimationFrame(onXRFrame);
+    };
+
+    const shutdownSession = async () => {
+      if (xrSession) {
+        await xrSession.end();
+        document.body.classList.remove("stabilized");
+        document.body.classList.remove("ar");
+
+        console.log("session ended");
+      }
+    };
+
+    const onXRFrame = (time, frame) => {
+      xrSession.requestAnimationFrame(onXRFrame);
+
+      const framebuffer = xrSession.renderState.baseLayer.framebuffer;      
+      gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+      renderer.setFramebuffer(framebuffer);
+
+      console.log("framebuffer", framebuffer);
+      console.log("renderer", renderer);
+      console.log("canvas", canvas);
+
+      const pose = frame.getViewerPose(localReferenceSpace);
+      if (pose) {
+        const view = pose.views[0];
+
+        const viewport = xrSession.renderState.baseLayer.getViewport(view);
+        renderer.setSize(viewport.width, viewport.height);
+
+        camera.matrix.fromArray(view.transform.matrix);
+        camera.projectionMatrix.fromArray(view.projectionMatrix);
+        camera.updateMatrixWorld(true);
+
+        let hitTestResults = [];
+        hitTestResults = frame.getHitTestResults(hitTestSource);
+        if (hitTestResults.length > 0) {
+          shutdownSession();
+        }
+        console.log("results ", hitTestResults);
+
+        if (!stabilized) {
+          stabilized = true;
+          document.body.classList.add("stabilized");
+        }
+
+        renderer.render(scene, camera);
+      }
+    };
+
+    const setupThreeJs = () => {
+      renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        preserveDrawingBuffer: true,
+        canvas: canvas,
+        context: gl,
+      });
+      renderer.autoClear = false;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      scene = createCubeScene();
+      camera = new THREE.PerspectiveCamera();
+      camera.matrixAutoUpdate = false;
+    };
+
+    const createCubeScene = () => {
+      const scene = new THREE.Scene();
+      box = new THREE.Mesh(
+        new THREE.BoxBufferGeometry(0.2, 0.2, 0.2),
+        new THREE.MeshBasicMaterial({ color: 0xff0000 })
+      );
+      box.position.set(1, 0, 1);
+      scene.add(box);
+
+      return scene;
+    };
+
+    activateXR();
+    console.log(canvas);
+  };
+
   return (
-    <section className={styles.container}>
-      {/* {screen === "start" ? (
-        ""
-      ) : (
-        <button
-          type="submit"
-          className={styles.back}
-          onClick={() => setScreen("start")}
-        >
-          x
-        </button>
-      )} */}
-
-      <h1 className="hidden">Tussen de sterren</h1>
-
-      {screen === "start" ? (
-        <section className={styles.start}>
-          <h2 className="hidden">Start</h2>
-          <p className={styles.title}>Tussen de sterren</p>
-          <div className={styles.buttons}>
-            <button
-              type="submit"
-              className={styles.button}
-              onClick={() => setScreen("parent")}
-            >
-              Bekijk een universum
-            </button>
-            <button
-              type="submit"
-              className={styles.button}
-              onClick={() => setScreen("kid")}
-            >
-              Bouw je eigen universum
-            </button>
-          </div>
-        </section>
-      ) : (
-        ""
-      )}
-
-      {screen === "kid" ? <Kid /> : ""}
-      {screen === "parent" ? <Parent /> : ""}
-    </section>
+    <div className="App">
+      <p>test</p>
+      <button disabled={!XRIsSupported} onClick={openAR}>
+        {XRIsSupported ? "enter ar" : "not supported"}
+      </button>
+      <canvas className="canvas"></canvas>
+    </div>
   );
 };
 
