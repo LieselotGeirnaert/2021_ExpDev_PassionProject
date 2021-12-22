@@ -1,25 +1,16 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 const { XRWebGLLayer } = window;
 
 const App = () => {
   const [XRIsSupported, setXRIsSupported] = useState();
+  const canvasRef = useRef();
 
-  let xrSession;
-  let canvas;
-  let gl;
-  let scene;
-  let camera;
-  let renderer;
-  let stabilized = false;
-  let localReferenceSpace;
-  let viewerSpace;
-  let hitTestSource;
-  let box;
-  
   useEffect(() => {
+    console.log(canvasRef.current);
+
     const checkXRSupport = async () => {
       const isArSessionSupported =
         navigator.xr &&
@@ -37,7 +28,17 @@ const App = () => {
 
   const openAR = () => {
     console.log("open");
-    
+
+    let xrSession;
+    let gl;
+    let scene;
+    let camera;
+    let renderer;
+    let stabilized = false;
+    let localReferenceSpace;
+    let viewerSpace;
+    let hitTestSource;
+    let box;
 
     const activateXR = async () => {
       try {
@@ -55,19 +56,23 @@ const App = () => {
     };
 
     const createXRCanvas = () => {
-      canvas = document.createElement("canvas");
-      document.body.appendChild(canvas);
-      gl = canvas.getContext("webgl", { xrCompatible: true });
-      console.log("canvas ", canvas);
+      // canvas = document.createElement("canvas");
+      // document.body.appendChild(canvas);
+      gl = canvasRef.current.getContext("webgl", { xrCompatible: true });
+      console.log("canvas ", canvasRef);
       console.log("gl ", gl);
+      console.log("xrSession 1 ", xrSession);
 
       xrSession.updateRenderState({
         baseLayer: new XRWebGLLayer(xrSession, gl),
       });
+
+      console.log("xrSession 2 ", xrSession);
+
     };
 
     const onSessionStarted = async () => {
-      document.body.classList.add("ar");
+      // document.body.classList.add("ar");
       setupThreeJs();
       localReferenceSpace = await xrSession.requestReferenceSpace("local");
       viewerSpace = await xrSession.requestReferenceSpace("viewer");
@@ -94,11 +99,13 @@ const App = () => {
 
       const framebuffer = xrSession.renderState.baseLayer.framebuffer;      
       gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+      console.log("framebuffer", framebuffer);
+      console.log("renderer", renderer);
+
       renderer.setFramebuffer(framebuffer);
 
       console.log("framebuffer", framebuffer);
       console.log("renderer", renderer);
-      console.log("canvas", canvas);
 
       const pose = frame.getViewerPose(localReferenceSpace);
       if (pose) {
@@ -131,7 +138,7 @@ const App = () => {
       renderer = new THREE.WebGLRenderer({
         alpha: true,
         preserveDrawingBuffer: true,
-        canvas: canvas,
+        canvas: canvasRef.current,
         context: gl,
       });
       renderer.autoClear = false;
@@ -155,7 +162,6 @@ const App = () => {
     };
 
     activateXR();
-    console.log(canvas);
   };
 
   return (
@@ -164,7 +170,7 @@ const App = () => {
       <button disabled={!XRIsSupported} onClick={openAR}>
         {XRIsSupported ? "enter ar" : "not supported"}
       </button>
-      <canvas className="canvas"></canvas>
+      <canvas className="canvas" ref={canvasRef}></canvas>
     </div>
   );
 };

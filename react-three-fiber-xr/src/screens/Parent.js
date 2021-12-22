@@ -1,4 +1,4 @@
-import { useState, Suspense } from "react";
+import { useState } from "react";
 // components
 import SendMessage from "../components/parents/SendMessage";
 import Overview from "../components/parents/Overview";
@@ -13,7 +13,7 @@ const Parent = () => {
   };
 
   return (
-    <section>
+    <section className={styles.container}>
       { currentScreen === "overview" ? (
         <Overview handleSetScreen={(screen) => handleSetScreen(screen)} />
       ) : (

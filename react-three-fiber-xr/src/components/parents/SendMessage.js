@@ -30,44 +30,58 @@ const SendMessage = ({ handleSetScreen }) => {
     await setDoc(doc(db, "messages", generateId(15)), {
       sender: messageText,
       message: senderText,
+      read: false,
     });
   };
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Plaats je bericht tussen de sterren</h2>
       {screen === "message" ? (
-        <form onSubmit={handleFormSubmission} className={styles.form}>
-          <label className={styles.label}>Van wie komt het berichtje?</label>
-          <input
-            value={senderText}
-            onChange={(e) => setSenderText(e.target.value)}
-            className={styles.input}
-          ></input>
-          <label className={styles.label}>Wat wil je sturen?</label>
-          <textarea
-            value={messageText}
-            onChange={(e) => setMessageText(e.target.value)}
-            className={styles.textarea}
-          ></textarea>
+        <>
           <button
-            type="submit"
-            className={buttonDisabled ? styles.buttonDisabled : styles.button}
-            disabled={buttonDisabled}
+            className="back"
+            onClick={() => handleSetScreen("overview")}
           >
-            Bericht verzenden
+            x
           </button>
-        </form>
+          <h2 className={styles.title}>Plaats je bericht tussen de sterren</h2>
+          <form onSubmit={handleFormSubmission} className={styles.form}>
+            <label className={styles.label}>Van wie komt het berichtje?</label>
+            <input
+              value={senderText}
+              onChange={(e) => setSenderText(e.target.value)}
+              className={styles.input}
+            ></input>
+            <label className={styles.label}>Wat wil je sturen?</label>
+            <textarea
+              value={messageText}
+              onChange={(e) => setMessageText(e.target.value)}
+              className={styles.textarea}
+            ></textarea>
+            <button
+              type="submit"
+              className={buttonDisabled ? styles.buttonDisabled : styles.button}
+              disabled={buttonDisabled}
+            >
+              Bericht verzenden
+            </button>
+          </form>
+        </>
       ) : (
         ""
       )}
       {screen === "confirmation" ? (
-        <div>
-          <p>We hebben je berichtje goed ontvangen!</p>
-          <button type="submit" onClick={() => handleSetScreen("overview")}>
-            Bekijk het universum
+        <>
+          <h2 className={styles.title}>bedankt!</h2>
+          <p className={styles.text}>We hebben je berichtje goed ontvangen!</p>
+          <button
+            type="submit"
+            onClick={() => handleSetScreen("overview")}
+            className={styles.button}
+          >
+            Terug naar het universum
           </button>
-        </div>
+        </>
       ) : (
         ""
       )}

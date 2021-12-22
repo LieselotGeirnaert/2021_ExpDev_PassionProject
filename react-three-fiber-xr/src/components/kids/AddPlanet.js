@@ -1,7 +1,3 @@
-import { useState, useEffect, Suspense } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { ARCanvas } from "@react-three/xr";
-// components
 // styling
 import styles from "./AddPlanet.module.css";
 

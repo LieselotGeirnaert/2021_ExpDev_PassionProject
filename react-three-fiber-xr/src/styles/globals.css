@@ -1,17 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
 
 @font-face {
   font-family: "amerio";
-  src: url("../assets/fonts/AmerioRough.otf")
-    format("woff");
+  src: url("../assets/fonts/AmerioRough.otf") format("woff");
   font-weight: 700;
   font-style: normal;
 }
 
+@font-face {
+  font-family: "averta-bold";
+  src: url("../assets/fonts/AvertaExtraBold.otf") format("woff");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "averta-regular";
+  src: url("../assets/fonts/AvertaRegular.otf") format("woff");
+  font-weight: 700;
+  font-style: normal;
+}
 p {
   color: var(--white);
   font-family: amerio;
-
 }
 
 .hidden {
@@ -32,4 +42,19 @@ p {
   height: 1.5rem;
   width: 1.5rem;
   margin-bottom: 2rem;
+}
+
+body {
+  font-family: averta-regular;
+}
+
+input,
+textarea {
+  color: inherit;
+  font-family: averta-regular;
+  font-size: inherit;
+}
+
+button, a {
+  cursor: pointer;
 }

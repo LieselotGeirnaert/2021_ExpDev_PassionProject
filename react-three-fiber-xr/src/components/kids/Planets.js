@@ -26,6 +26,7 @@ const Planets = ({ handleSetScreen }) => {
         <span className="hidden">Terug</span>
       </button>
       <h3 className="hidden">Planeten</h3>
+
       <ARCanvas className={styles.canvas}>
         <ambientLight intensity={0.2} />
         <directionalLight position={[0, 0, 5]} />

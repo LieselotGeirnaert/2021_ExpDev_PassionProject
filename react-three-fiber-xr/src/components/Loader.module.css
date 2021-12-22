@@ -1,0 +1,7 @@
+.text {
+  color: var(--orange);
+  font-family: averta-bold;
+  font-size: 3rem;
+  text-align: center;
+  width: 10rem;
+}

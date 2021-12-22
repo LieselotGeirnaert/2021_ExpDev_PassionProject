@@ -1,5 +1,4 @@
-import { useState, useEffect, Suspense } from "react";
-import { collection, onSnapshot } from "firebase/firestore";
+import { useState, Suspense } from "react";
 import { ARCanvas } from "@react-three/xr";
 import { Loader } from "@react-three/drei";
 // components
@@ -12,11 +11,11 @@ const Messages = ({ readMessages, unreadMessages, handleSetScreen }) => {
 
   const handleNewMessage = () => {
     setCurrentScreen("search");
-    console.log("hier moet AR openen om het bericht te zoeken");
   };
 
   const handleClickMessage = () => {
     console.log("bericht openen");
+    setCurrentScreen("overview")
   };
 
   return (
@@ -26,9 +25,6 @@ const Messages = ({ readMessages, unreadMessages, handleSetScreen }) => {
       </button>
       {currentScreen === "overview" ? (
         <div>
-          <button className="back" onClick={() => handleSetScreen("kid")}>
-            <span className="hidden">Terug</span>
-          </button>
           <h3 className={styles.title}>Jouw berichten</h3>
           <button className={styles.new} onClick={handleNewMessage}>
             <img

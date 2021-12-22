@@ -9,12 +9,10 @@ const Planet = ({ name, location }) => {
   };
 
   return (
-    <Interactive
-      onSelect={onSelect}
-    >
+    <Interactive onSelect={onSelect}>
       <primitive
         object={model.scene}
-        scale={[0.001, 0.001, 0.001]}
+        scale={[0.0005, 0.0005, 0.0005]}
         position={location}
       />
     </Interactive>

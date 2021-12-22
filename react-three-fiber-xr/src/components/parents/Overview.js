@@ -1,10 +1,10 @@
 import { useState, useEffect, Suspense } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 // components
 import { db } from "../../firebase-config";
 import Loader from "../Loader";
-import Planet from "../Planet";
+import Planet from "./Planet";
 // styling
 import styles from "./Overview.module.css";
 
@@ -18,8 +18,9 @@ const Overview = ({ handleSetScreen }) => {
   }, []);
 
   return (
-    <>
-      {/* <Canvas className={styles.canvas}>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Welkom in het universum van Lieselot</h2>
+      <Canvas className={styles.canvas}>
         <ambientLight intensity={0.2} />
         <directionalLight position={[0, 0, 5]} />
         <Suspense fallback={<Loader />}>
@@ -31,7 +32,7 @@ const Overview = ({ handleSetScreen }) => {
             />
           ))}
         </Suspense>
-      </Canvas> */}
+      </Canvas>
       <button
         type="submit"
         className={styles.button}
@@ -39,7 +40,7 @@ const Overview = ({ handleSetScreen }) => {
       >
         Verstuur een berichtje
       </button>
-    </>
+    </div>
   );
 };
 
