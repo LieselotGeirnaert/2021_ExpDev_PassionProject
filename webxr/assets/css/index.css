@@ -1,0 +1,77 @@
+.body {
+  align-items: center;
+  background-color: var(--darkestBlue);
+  background-image: url(../img/star-bg.svg);
+  background-position: center;
+  background-repeat: repeat;
+  background-size: 30%;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.container {
+  margin: 5rem 0;
+  width: 85vw;
+}
+
+.title {
+  color: var(--white);
+  font-family: amerio;
+  font-size: 1.3rem;
+  padding-bottom: 2rem;
+}
+
+.new {
+  align-items: center;
+  background-color: var(--orange);
+  border: none;
+  border-radius: var(--borderSmall);
+  display: flex;
+  margin: 0.5rem 0;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.newText {
+  font-family: Roboto;
+  font-size: 1.3rem;
+  margin-left: .5rem;
+}
+
+.unsupported-info {
+  margin: 2rem 0;
+  display: none;
+  text-align: center;
+}
+
+body.unsupported .unsupported-info {
+  display: block;
+}
+
+body.ar .body {
+  display: none;
+}
+
+#stabilization {
+  background-image: url(../img/stabilization.gif);
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 0);
+  z-index: 10;
+  display: none;
+}
+
+body.ar #stabilization {
+  display: block;
+}
+
+body.ar.stabilized #stabilization {
+  display: none;
+}

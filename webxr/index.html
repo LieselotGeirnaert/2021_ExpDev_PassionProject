@@ -8,19 +8,24 @@
   <link rel="stylesheet" type="text/css" href="./assets/css/globals.css" />
   <link rel="stylesheet" type="text/css" href="./assets/css/vars.css" />
   <link rel="stylesheet" type="text/css" href="./assets/css/reset.css" />
-  <link rel="stylesheet" type="text/css" href="./assets/css/start.css" />
+  <link rel="stylesheet" type="text/css" href="./assets/css/index.css" />
+  <script src="https://unpkg.com/three@0.126.0/build/three.js"></script>
+  <script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 <body>
   <section class="body">
     <h1 class="hidden">Tussen de sterren</h1>
-    <section class="start__container">
-      <h2 class="hidden">Start</h2>
-      <p class="start__title">Tussen de sterren</p>
-      <div class="start__buttons">
-        <a href="ouder.html" class="start__button">Bekijk een universum</a>
-        <a href="kind.html" class="start__button">Bouw je eigen universum</a>
-      </div>
+    <section class="container">
+      <h3 class="title">Jouw berichten</h3>
+      <button class="new" id="enter-ar">
+        <img alt="" src="./assets/img/icon-envelope-white.svg" width="50" height="50" class="listItemImg" />
+        <p class="newText">Je hebt 1 nieuw bericht</p>
+      </button>
+      <p class="unsupported-info">AR wordt niet ondersteund door deze browser</p>
     </section>
   </section>
+  <canvas class="canvas"></canvas>
+  <div id="stabilization"></div>
+  <script src="./js/app.js"></script>
 </body>
 </html>
